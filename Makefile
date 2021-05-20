@@ -390,6 +390,9 @@ else
 endif
 else
 	LD = $(CXX)
+
+	CFLAGS += -MMD -MP
+	CXXFLAGS += -MMD -MP
 endif
 
 %.o: %.cpp
@@ -426,4 +429,6 @@ install: all
 	cp -r dinothawr/* $(ASSETDIR)
 
 .PHONY: clean install
+
+-include $(OBJECTS:%.o=%.d)
 endif
