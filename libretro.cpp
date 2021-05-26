@@ -152,8 +152,12 @@ static void frame_time_cb(retro_usec_t usec)
    frame_time = usec;
 }
 
+#include "retro_getvars.c"
+
 static void update_variables()
 {
+   #include "retro_getvars_front.h"
+
    retro_variable var = { "dino_timer" };
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
@@ -165,6 +169,8 @@ static void update_variables()
       if (log_cb)
          log_cb(RETRO_LOG_INFO, "Dinothawr: Using timer as FPS reference: %s.\n", option_use_frame_time ? "enabled" : "disabled");
    }
+
+   #include "retro_getvars_back.h"
 }
 
 static void check_variables()

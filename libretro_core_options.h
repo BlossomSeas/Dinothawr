@@ -27,6 +27,9 @@ extern "C" {
  *   frontend language definition */
 
 struct retro_core_option_definition option_defs_us[] = {
+   #include "retro_setenv_front.h"
+   #include "retro_dummy_option.h"
+
    {
       "dino_timer",
       "Timer as FPS reference",
@@ -38,6 +41,8 @@ struct retro_core_option_definition option_defs_us[] = {
       },
       "enabled",
    },
+
+   #include "retro_setenv_back.h"
    { NULL, NULL, NULL, { NULL, NULL }, NULL },
 };
 
