@@ -4,6 +4,9 @@
 
 using namespace std;
 
+// global namespace
+extern unsigned bgm_option;
+
 namespace Icy
 {
    void BGManager::init(const vector<Track>& tracks)
@@ -33,9 +36,68 @@ namespace Icy
          }
          else
          {
-            unsigned index = rand() % tracks.size();
-            if (index == last)
-               index = (index + 1) % tracks.size();
+            unsigned index;
+            static unsigned bgm_tracks[100];
+            static unsigned bgm_index = tracks.size();
+
+            switch( bgm_option )
+            {
+               case 0:
+                  //printf( "normal = random\n" );
+                  index = rand() % tracks.size();
+
+                  if (index == last)
+                     index = (index + 1) % tracks.size();
+                  break;
+
+               case 1:
+                  //printf( "original = linear\n" );
+
+                  if( bgm_index == last )
+                     bgm_index = (bgm_index + 1) % tracks.size();
+
+                  index = bgm_index % tracks.size();
+                  bgm_index = (bgm_index + 1) % tracks.size();
+                  break;
+
+               case 2:
+                  if( bgm_index == tracks.size() )
+                  {
+                     //printf( "shuffle\n" );
+
+                     for( bgm_index = 0; bgm_index < tracks.size(); bgm_index++ )
+                     {
+                        unsigned index;
+                        while(1)
+                        {
+                           bool valid = true;
+                           index = rand() % tracks.size();
+
+                           if( index == last )
+                              valid = false;
+
+                           for( unsigned lcv = 0; lcv < bgm_index; lcv++ )
+                           {
+                              if( bgm_tracks[ lcv ] == index )
+                                 valid = false;
+                           }
+
+                           if( valid )
+                              break;
+                        }
+
+                        //printf( "%d: %d\n", bgm_index, index );
+                        bgm_tracks[ bgm_index ] = index;
+                        last = index;
+                     }
+
+                     bgm_index = 0;
+                  }
+
+                  index = bgm_tracks[ bgm_index ];
+                  bgm_index++;
+                  break;
+            }
 
             loader.request_vorbis(tracks[index].path);
             last = index;
