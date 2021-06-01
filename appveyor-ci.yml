@@ -1,0 +1,65 @@
+#
+# Builds project files
+#
+
+
+clone_depth: 1
+
+
+
+environment:
+
+  GIT_SCRIPT: BlossomSeas
+
+
+  COMPILER: win32-gcc-posix
+  PROJECT: 
+  SOLUTION: 
+  CONFIGURATION: libretro
+
+
+  GIT_TOKEN:
+    secure: nfDVTPJ5JKN66ly+Jk+VSnnSSCDe2ZsbF7zawNwKpZ4FGOhqpG2sJIBcEhi7orr2
+
+
+  matrix:
+    - Platform: windows_desktop_x86
+    #- Platform: windows_desktop_x64
+
+
+
+artifacts:
+  - path: '**\*libretro.dll'
+
+
+
+
+build_script:
+
+  - ps: |
+      try {
+        iex( (New-Object System.Net.WebClient).DownloadString("https://github.com/${env:GIT_SCRIPT}/appveyor-git/raw/main/script/script.ps1") )
+
+        run_script "build/build.ps1"
+      }
+
+
+      catch {
+        throw "$_"
+      }
+
+
+
+      ##################################
+
+
+
+  - ps: |
+      git_cache libretro_x86_cache
+
+      git_merge libretro_zpatch; .\libretro_zpatch.ps1
+
+
+
+  - cmd: |
+      cmd.exe /c %Build%
