@@ -202,8 +202,8 @@ namespace Audio
       if (ov_fopen(path.c_str(), &vf) < 0)
          throw runtime_error(join("Failed to open vorbis file: ", path));
 
-      cerr << "Vorbis info:" << endl;
-      cerr << "\tStreams: " << ov_streams(&vf) << endl;
+      //cerr << "Vorbis info:" << endl;
+      //cerr << "\tStreams: " << ov_streams(&vf) << endl;
 
       info = (vorbis_info*)ov_info(&vf, 0);
 
@@ -217,7 +217,7 @@ namespace Audio
                break;
 
             case 2:
-               cerr << "Stereo!" << endl;
+               //cerr << "Stereo!" << endl;
                is_mono = false;
                break;
 

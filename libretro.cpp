@@ -202,7 +202,7 @@ void retro_run(void)
 
    get_bg().step(mixer);
 
-   if (!use_audio_cb)
+   if (!use_audio_cb || !option_use_audio_thread)
       audio_callback();
 
    if (game->done())
